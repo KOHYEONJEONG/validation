@@ -23,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ValidationItemControllerV2 {
 
+    //ctrl + r : 한번에 변경
+
     private final ItemRepository itemRepository;
     private final ItemValidator itemValidator;
 
