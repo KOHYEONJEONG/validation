@@ -78,6 +78,8 @@ public class ValidationItemControllerV2 {
         //검증에 실패하면 다시 입력 폼으로
         if(bindingResult.hasErrors()) {
             log.info("errors={} ", bindingResult);
+
+            //bindingResult를 model에 안 담는 이유는, 자동으로 넘어가기 때문이다!!!
             return "validation/v2/addForm";
         }
 
@@ -90,6 +92,12 @@ public class ValidationItemControllerV2 {
 
 //    @PostMapping("/add")
     public String addItemV2(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+
+        //사용자가 입력한 값을 유지하려면?
+        //public FieldError(String objectName, String field, @Nullable Object
+        //                  rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable
+        //                  Object[] arguments, @Nullable String defaultMessage)
+        // 세번째 인자값에 사용자 입력값을 보관한다.
 
         //검증 로직
         if (!StringUtils.hasText(item.getItemName())) {
