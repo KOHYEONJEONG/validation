@@ -13,8 +13,8 @@
 3-1.@InitBinder와 WebDataBinder <br/>
 ㄴWebDataBinder : 컨트롤러 요청될때 새롭게 만들어진다. 해당 컨트롤러에 메서드들을 호출하면 자동으로 검증기 적용(자세게 알필요 x) <br/>
 ㄴ   dataBinder.addValidators(itemValidator);<br/>
-ㄴ 사용 :  public String addItemV6(<span style="color:red">@Validated</span> @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {..}
+ㄴ 사용 :  public String addItemV6(<strong style="color:red">@Validated</strong> @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {..}
 
 <br/>
 #추가<br/>
-errors.properties 추가 후 application.properties에 spring.messages.basename=messages,<span style="color:red">errors</span> 등록<br/>
+errors.properties 추가 후 application.properties에 spring.messages.basename=messages,<strong style="color:red">errors</strong> 등록<br/>
