@@ -17,4 +17,4 @@
 
 <br/>
 #추가<br/>
-errors.properties 추가 spring.messages.basename=messages,errors 등록<br/>
+errors.properties 추가 후 application.properties에 spring.messages.basename=messages,<strong>errors</strong> 등록<br/>
