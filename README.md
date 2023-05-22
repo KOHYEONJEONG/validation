@@ -14,3 +14,7 @@
 ㄴWebDataBinder : 컨트롤러 요청될때 새롭게 만들어진다. 해당 컨트롤러에 메서드들을 호출하면 자동으로 검증기 적용(자세게 알필요 x) <br/>
 ㄴ   dataBinder.addValidators(itemValidator);<br/>
 ㄴ 사용 :  public String addItemV6(<strong>@Validated</strong> @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {..}
+
+<br/>
+#추가<br/>
+errors.properties 추가 spring.messages.basename=messages,errors 등록<br/>
