@@ -28,9 +28,12 @@ public class ValidationItemControllerV2 {
     private final ItemRepository itemRepository;
     private final ItemValidator itemValidator;
 
-    @InitBinder
+    @InitBinder //해당 컨트롤러에만 영향을 준다.(글로벌 설정은 별도로 해야한다.)
     public void init(WebDataBinder dataBinder) {
+        //WebDataBinder : 컨트롤러 요청될때 새롭게 만들어진다. 해당 컨트롤러에 메서드들을 호출하면 자동으로 검증기 적용
+        //이제 사용할 메서드 맨 앞에 @Validated를 넣어주면 된다.
         dataBinder.addValidators(itemValidator);
+        //dataBinder.addValidators(검증기); <-- 검증기를 여러개 추가해도 된다. 왜? supports()에서 해당 객체가 넘어오면 true를 리턴하고 그래야하만 validate() 함수가 실행된다.
     }
 
     @GetMapping
@@ -168,7 +171,10 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    @PostMapping("/add")
+
+    /** (개발자에 욕심은 끝이 없다 훨씬 간결해졌다.)
+     * rejectValue를 사용하면 ObjectError, FieldError가 다 이뤄진다. */
+//    @PostMapping("/add")
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         /*
@@ -182,7 +188,9 @@ public class ValidationItemControllerV2 {
         log.info("objectName={}", bindingResult.getObjectName());
         log.info("target={}", bindingResult.getTarget());
 
-        //검증로직(아래 IF문 181~183이랑 같은 문장)
+       /**검증로직(아래 IF문 191~194 같은 문장)
+        * 단, Empty와 공백 같은 단순한 기능만 제공한다.
+        * */
         //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName","required");
 
         //rejectValue : 거절한 값
@@ -208,8 +216,27 @@ public class ValidationItemControllerV2 {
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {
             log.info("errors={} ", bindingResult);
+            /**
+             # ObjectError (reject("totalPriceMin"))
+             Error in object 'item': codes [totalPriceMin.item,totalPriceMin]; arguments [10000,2000]; default message [null] */
+
+            /**
+             # FieldError (rejectValue("itemName", "required"))
+             2023-05-22 23:32:47.469  INFO 9292 --- [nio-8090-exec-6] h.i.w.v.ValidationItemControllerV2       : errors=org.springframework.validation.BeanPropertyBindingResult: 3 errors
+             Field error in object 'item' on field 'itemName': rejected value []; codes [required.item.itemName,required.itemName,required.java.lang.String,required]; arguments []; default message [null]
+             Field error in object 'item' on field 'price': rejected value [null]; codes [range.item.price,range.price,range.java.lang.Integer,range]; arguments [1000,10000000]; default message [null]
+             Field error in object 'item' on field 'quantity': rejected value [null]; codes [max.item.quantity,max.quantity,max.java.lang.Integer,max]; arguments [9999]; default message [null]*/
             return "validation/v2/addForm";
         }
+
+        /**
+         * #정리
+         * 1. rejectValue() 호출
+         * 2. MessageCodesResolver() 를 사용해서 검증 오류 코드로 메시지 코드들을 생성
+         * 3. new FieldError()를 생성하면서 메시지 코드들을 보관
+         * 4. th:errors에서 메시지 코드들로 메시지를 순서대로 메시지에서 찾고 노출
+         *
+         * */
 
         //성공 로직
         Item savedItem = itemRepository.save(item);
@@ -221,6 +248,7 @@ public class ValidationItemControllerV2 {
 //    @PostMapping("/add")
     public String addItemV5(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
+        /** ItemValidator.java에서 검증을 관리할거다. 유지보수하기 좋아진다. */
         itemValidator.validate(item, bindingResult);
 
         //검증에 실패하면 다시 입력 폼으로
@@ -236,10 +264,20 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    //@PostMapping("/add")
+    /**
+     * @Validated : 검증기를 편리하게 도입
+     * ㄴ validator를 직접 호출하는 부분이 사라지고, 대신에 검증 대상 앞에 @Validated가 붙었다.
+     * */
+    @PostMapping("/add")
     public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         // @Validated @ModelAttribute Item item, BindingResult bindingResult <-- 작성 순서 중요!
+
+        //(아래)이 컨트롤러 맨상단에 적음.
+//        @InitBinder
+//        public void init(WebDataBinder dataBinder) {
+//            dataBinder.addValidators(itemValidator);
+//        }
 
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {

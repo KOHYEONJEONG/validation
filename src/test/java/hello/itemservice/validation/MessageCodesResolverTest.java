@@ -13,7 +13,11 @@ public class MessageCodesResolverTest {
 
     @Test
     void messageCodeResolverObject(){
+
+
        String[] messageCodes =  codesResolver.resolveMessageCodes("required","item");
+        //new ObjectError("item", new String[]{"required.item", "required"}); <-- 두번째 파라미터 부분이 messageCodes가 들어가는거다.
+
         for(String messageCode : messageCodes){
             System.out.println("messageCode = "+messageCode);
         }
@@ -23,24 +27,25 @@ public class MessageCodesResolverTest {
           messageCode = required
         * */
 
-        //new ObjectError("item", new String[]{"required.item", "required"});
+
     }
 
     @Test
     void messageCodeResolverField(){
         String[] messageCodes = codesResolver.resolveMessageCodes("required","item", "itemName", String.class);
+        //bindingResult.rejectValue("itemName", "required");
+        //new FieldError("item","itemName", null, false, messageCodes, null, null);
+
         for(String messageCode : messageCodes){
             System.out.println("messageCode = "+messageCode);
         }
-        //bindingResult.rejectValue("itemName", "required");
 
-        //new FieldError("item","itemName", null, false, messageCodes, null, null);
 
         assertThat(messageCodes).containsExactly(
                 //level 1부터 먼저 우선순위
-                "required.item.itemName",
-                "required.itemName",
-                "required.java.lang.String",
+                "required.item.itemName",//디데일하게
+                "required.itemName",//객체명 생략
+                "required.java.lang.String",//required.타입 <- 문자를 필수 입력하셔야합니다로 공통 메시지로 만들 수 있겠지?(숫자는 숫자로 입력하셔야합니다.)
                 "required");
 
         /*
