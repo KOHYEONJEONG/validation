@@ -1,4 +1,4 @@
-<h1> validation2</h1>
+<h1> validation</h1>
 
 <h4>스프링이 제공하는 유효성 검사 BindingResult</h4>
 1. new FieldError()
