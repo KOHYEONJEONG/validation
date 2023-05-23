@@ -7,6 +7,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/** Item 저장 폼 */
 @Data
 public class ItemSaveForm {
 

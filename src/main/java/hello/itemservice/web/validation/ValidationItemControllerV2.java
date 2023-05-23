@@ -267,6 +267,11 @@ public class ValidationItemControllerV2 {
     /**
      * @Validated : 검증기를 편리하게 도입
      * ㄴ validator를 직접 호출하는 부분이 사라지고, 대신에 검증 대상 앞에 @Validated가 붙었다.
+     *
+     *  검증시 @Validated @Valid 둘다 사용가능하다.
+     *   ㄴ javax.validation.@Valid 를 사용하려면 build.gradle 의존관계 추가가 필요하다.
+     *      > implementation 'org.springframework.boot:spring-boot-starter-validation'
+     *      > @Validated 는 스프링 전용 검증 애노테이션이고, @Valid 는 자바 표준 검증 애노테이션이다
      * */
     @PostMapping("/add")
     public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {

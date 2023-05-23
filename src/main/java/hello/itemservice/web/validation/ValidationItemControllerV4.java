@@ -23,6 +23,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ValidationItemControllerV4 {
 
+    /** groups 속성을 사용하면 복잡하다 ㅎㅎ
+     * 그래서
+     * 등록용 Form
+     * 수정용 Form
+     * 나눠서 생성하는게 더 좋다.
+     * */
+
     private final ItemRepository itemRepository;
 
     @GetMapping
@@ -45,6 +52,9 @@ public class ValidationItemControllerV4 {
         return "validation/v4/addForm";
     }
 
+    /** item 명으로 지정한 이유는 view단를 복붙해서 파일명만 변경해서 사용했기 때문에  수정을 줄이려고
+     *  이렇게 안혀면 model.addAttribute("itemSaveForm", form)으로 들어가게 되고 view단을 수정해야한다. <-- MVC강의 1편에서 나온설명
+     * */
     @PostMapping("/add")
     public String addItem(@Validated @ModelAttribute("item") ItemSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
@@ -81,6 +91,7 @@ public class ValidationItemControllerV4 {
         return "validation/v4/editForm";
     }
 
+    /** item 명으로 지정한 이유는 view단를 복붙해서 파일명만 변경해서 사용했기 때문에  수정을 줄이려고*/
     @PostMapping("/{itemId}/edit")
     public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemUpdateForm form, BindingResult bindingResult) {
 

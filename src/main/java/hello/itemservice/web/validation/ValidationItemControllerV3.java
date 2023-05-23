@@ -24,6 +24,8 @@ public class ValidationItemControllerV3 {
 
     private final ItemRepository itemRepository;
 
+    //기존에 등록한 ItemValidator를 제거해두자! 오류 검증기가 중복 적용된다. 이제 우리는 BeanValidator를 사용할거기 때문이다.
+
     @GetMapping
     public String items(Model model) {
         List<Item> items = itemRepository.findAll();
@@ -44,10 +46,11 @@ public class ValidationItemControllerV3 {
         return "validation/v3/addForm";
     }
 
-//    @PostMapping("/add")
+    //@PostMapping("/add")
+    /** addItemV6() ->  addItem */
     public String addItem(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
-        //특정 필드가 아닌 복합 룰 검증
+        //특정 필드가 아닌 복합 룰 검증(글로벌 검증은 그냥 자바코드로 입력해주는게 좋다.)
         if (item.getPrice() != null && item.getQuantity() != null) {
             int resultPrice = item.getPrice() * item.getQuantity();
             if (resultPrice < 10000) {
@@ -68,6 +71,11 @@ public class ValidationItemControllerV3 {
         return "redirect:/validation/v3/items/{itemId}";
     }
 
+
+    /** groups 기능을 먹일려면 @Validated 애너테이션만 사용가능하다.
+     * ㄴ @Valid 는 비추!
+     * ㄴㄴ@Valid 에는 groups를 적용할 수 있는 기능이 없다. 따라서 groups를 사용하려면 @Validated 를 사용해야 한다.
+     * */
     @PostMapping("/add")
     public String addItem2(@Validated(SaveCheck.class) @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 

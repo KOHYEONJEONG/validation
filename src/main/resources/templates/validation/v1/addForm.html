@@ -37,6 +37,8 @@
             <input type="text" id="itemName" th:field="*{itemName}"
                    th:class="${errors?.containsKey('itemName')} ? 'form-control field-error' : 'form-control'"
                    class="form-control" placeholder="이름을 입력하세요">
+                    <!-- errors?. 은 errors 가 null 일때 NullPointerException 이 발생하는 대신, null 을 반환하는 문법이다.-->
+
             <!--에러가 있으면 출력되게-->
             <div class="field-error" th:if="${errors?.containsKey('itemName')}" th:text="${errors['itemName']}">
                 상품명 오류
