@@ -28,6 +28,9 @@ public class ValidationItemControllerV4 {
      * 등록용 Form
      * 수정용 Form
      * 나눠서 생성하는게 더 좋다.
+     *  ㄴ 사실 이것도 비추이다.
+     *  ㄴ (즁요) Form을 각각 나누는게 더 좋다.(등록 Form, 수정 Form) , 현재 이 파일이 Form을 나눈 예시이다.
+     *
      * */
 
     private final ItemRepository itemRepository;

@@ -110,13 +110,13 @@ public class APIExceptionController {
 
 
         private static List<FieldException> create(BindingResult bindingResult){
-            List<FieldError> fieldException = bindingResult.getFieldErrors();
+            List<FieldError> fieldException = bindingResult.getFieldErrors(); //BindingResult의 getFieldErrors() 메서드를 사용하여 List 생성
             return fieldException.stream()
                     .map(error->new FieldException(
-                            error.getObjectName(),
+                            error.getField(),
                             (error.getRejectedValue() == null)?null:error.getRejectedValue().toString(),
                             error.getDefaultMessage()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()); //해당 List의 각 원소들에 대해 FieldException 객체가 필요로 하는 값을 각 필드로 매핑
         }
     }
 }
